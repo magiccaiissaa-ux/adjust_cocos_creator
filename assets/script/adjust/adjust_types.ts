@@ -28,7 +28,7 @@ export interface AdjustSessionSuccess {
     message?: string;
     timestamp?: string;
     adid?: string;
-    jsonResponse?: Dict | null;
+    jsonResponse?: string | null;
 }
 
 export interface AdjustSessionFailure {
@@ -36,7 +36,7 @@ export interface AdjustSessionFailure {
     timestamp?: string;
     adid?: string;
     willRetry?: boolean;
-    jsonResponse?: Dict | null;
+    jsonResponse?: string | null;
 }
 
 export interface AdjustEventSuccess {
@@ -45,7 +45,7 @@ export interface AdjustEventSuccess {
     adid?: string;
     eventToken?: string;
     callbackId?: string;
-    jsonResponse?: Dict | null;
+    jsonResponse?: string | null;
 }
 
 export interface AdjustEventFailure {
@@ -55,7 +55,7 @@ export interface AdjustEventFailure {
     eventToken?: string;
     callbackId?: string;
     willRetry?: boolean;
-    jsonResponse?: Dict | null;
+    jsonResponse?: string | null;
 }
 
 export interface AdjustAttribution {
@@ -70,7 +70,7 @@ export interface AdjustAttribution {
     costAmount?: number;
     costCurrency?: string;
     fbInstallReferrer?: string;
-    jsonResponse?: Dict | null;
+    jsonResponse?: string | null;
 }
 
 export interface AdjustInstallReferrerDetails {
