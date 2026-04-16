@@ -81,6 +81,68 @@ This wrapper uses two paths:
 
 The bridge is initialized from TypeScript through `AdjustManager.initBridge()` and `AdjustManager.init(...)`.
 
+## Mapping Reference
+
+### TypeScript -> native dispatch event mapping
+
+| TypeScript call | Native event name | Native target |
+| --- | --- | --- |
+| `AdjustManager.init(...)` | `adjustInitConfig` | `AdjustCocos.init(payload)` |
+| `AdjustManager.trackEvent(...)` | `adjustTrackEvent` | `AdjustCocos.trackEvent(...)` |
+| `AdjustManager.trackAdRevenue(...)` | `adjustTrackAdRevenue` | `AdjustCocos.trackAdRevenue(...)` |
+| `AdjustManager.openDeeplink(url)` | `adjustOpenDeeplink` | `AdjustCocos.processDeeplink(...)` |
+| `AdjustManager.getAdid()` | `adjustGetAdid` | `AdjustCocos.getAdid()` |
+| `AdjustManager.getAttribution()` | `adjustGetAttribution` | `AdjustCocos.getAttribution()` |
+| `AdjustManager.getInstallReferrer()` | `adjustGetInstallReferrer` | `AdjustCocos.getGooglePlayInstallReferrer()` |
+| `AdjustManager.getGoogleAdId()` | `adjustGetGoogleAdId` | `AdjustCocos.getGoogleAdId()` |
+| `AdjustManager.getAmazonAdId()` | `adjustGetAmazonAdId` | `AdjustCocos.getAmazonAdId()` |
+| `AdjustManager.getLastDeeplink()` | `adjustGetLastDeeplink` | `AdjustCocos.getLastDeeplink()` |
+| `AdjustManager.getSdkVersion()` | `adjustGetSdkVersion` | `AdjustCocos.getSdkVersion()` |
+| `AdjustManager.verifyPlayStorePurchase(...)` | `adjustVerifyPlayStorePurchase` | `AdjustCocos.verifyPlayStorePurchase(...)` |
+| `AdjustManager.onResume()` | `adjustOnResume` | `AdjustCocos.onResume()` |
+| `AdjustManager.onPause()` | `adjustOnPause` | `AdjustCocos.onPause()` |
+
+### Native callback -> TypeScript listener mapping
+
+| Native callback event | TypeScript listener / await target |
+| --- | --- |
+| `adjustOnSessionTrackingSucceeded` | `onSessionTrackingSucceeded(...)` |
+| `adjustOnSessionTrackingFailed` | `onSessionTrackingFailed(...)` |
+| `adjustOnEventTrackingSucceeded` | `onEventTrackingSucceeded(...)` |
+| `adjustOnEventTrackingFailed` | `onEventTrackingFailed(...)` |
+| `adjustOnAttributionChanged` | `onAttributionChanged(...)`, `getAttributionWithTimeout(...)` |
+| `adjustOnDeferredDeeplinkResponse` | `onDeferredDeeplinkResponse(...)` |
+| `adjustOnAdidRead` | `getAdidWithTimeout(...)` |
+| `adjustOnGoogleAdIdRead` | `onGoogleAdIdRead(...)`, `getGoogleAdIdWithTimeout(...)` |
+| `adjustOnAmazonAdIdRead` | `onAmazonAdIdRead(...)`, `getAmazonAdIdWithTimeout(...)` |
+| `adjustOnLastDeeplinkRead` | `onLastDeeplinkRead(...)`, `getLastDeeplinkWithTimeout(...)` |
+| `adjustOnSdkVersionRead` | `onSdkVersionRead(...)`, `getSdkVersionWithTimeout(...)` |
+| `adjustOnPlayStorePurchaseVerified` | `onPlayStorePurchaseVerified(...)`, `verifyPlayStorePurchaseWithTimeout(...)` |
+| `adjustInstallReferrerRead` | `onInstallReferrerRead(...)`, `getInstallReferrerWithTimeout(...)` |
+
+### Direct static API mapping
+
+These APIs do not go through `jsbBridgeWrapper.dispatchEventToNative(...)`. They call `com.adjust.sdk.Adjust` directly through `native.reflection.callStaticMethod(...)`.
+
+| TypeScript API | Direct Android call |
+| --- | --- |
+| `AdjustManager.enable()` | `Adjust.enable()` |
+| `AdjustManager.disable()` | `Adjust.disable()` |
+| `AdjustManager.switchToOfflineMode()` | `Adjust.switchToOfflineMode()` |
+| `AdjustManager.switchBackToOnlineMode()` | `Adjust.switchBackToOnlineMode()` |
+| `AdjustManager.addGlobalCallbackParameter(key, value)` | `Adjust.addGlobalCallbackParameter(key, value)` |
+| `AdjustManager.addGlobalPartnerParameter(key, value)` | `Adjust.addGlobalPartnerParameter(key, value)` |
+| `AdjustManager.removeGlobalCallbackParameter(key)` | `Adjust.removeGlobalCallbackParameter(key)` |
+| `AdjustManager.removeGlobalPartnerParameter(key)` | `Adjust.removeGlobalPartnerParameter(key)` |
+| `AdjustManager.removeGlobalCallbackParameters()` | `Adjust.removeGlobalCallbackParameters()` |
+| `AdjustManager.removeGlobalPartnerParameters()` | `Adjust.removeGlobalPartnerParameters()` |
+| `AdjustManager.endFirstSessionDelay()` | `Adjust.endFirstSessionDelay()` |
+| `AdjustManager.enableCoppaComplianceInDelay()` | `Adjust.enableCoppaComplianceInDelay()` |
+| `AdjustManager.disableCoppaComplianceInDelay()` | `Adjust.disableCoppaComplianceInDelay()` |
+| `AdjustManager.enablePlayStoreKidsComplianceInDelay()` | `Adjust.enablePlayStoreKidsComplianceInDelay()` |
+| `AdjustManager.disablePlayStoreKidsComplianceInDelay()` | `Adjust.disablePlayStoreKidsComplianceInDelay()` |
+| `AdjustManager.setExternalDeviceIdInDelay(id)` | `Adjust.setExternalDeviceIdInDelay(id)` |
+
 ## Supported Features
 
 - SDK initialization with `AdjustConfig`

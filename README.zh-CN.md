@@ -84,6 +84,68 @@ implementation 'com.adjust.sdk:adjust-android:5.6.0'
 
 桥接初始化由 TS 侧触发，通常调用 `AdjustManager.initBridge()` 或 `AdjustManager.init(...)` 即可。
 
+## 映射关系
+
+### TypeScript 到原生派发事件映射
+
+| TypeScript 调用 | 原生事件名 | 原生目标 |
+| --- | --- | --- |
+| `AdjustManager.init(...)` | `adjustInitConfig` | `AdjustCocos.init(payload)` |
+| `AdjustManager.trackEvent(...)` | `adjustTrackEvent` | `AdjustCocos.trackEvent(...)` |
+| `AdjustManager.trackAdRevenue(...)` | `adjustTrackAdRevenue` | `AdjustCocos.trackAdRevenue(...)` |
+| `AdjustManager.openDeeplink(url)` | `adjustOpenDeeplink` | `AdjustCocos.processDeeplink(...)` |
+| `AdjustManager.getAdid()` | `adjustGetAdid` | `AdjustCocos.getAdid()` |
+| `AdjustManager.getAttribution()` | `adjustGetAttribution` | `AdjustCocos.getAttribution()` |
+| `AdjustManager.getInstallReferrer()` | `adjustGetInstallReferrer` | `AdjustCocos.getGooglePlayInstallReferrer()` |
+| `AdjustManager.getGoogleAdId()` | `adjustGetGoogleAdId` | `AdjustCocos.getGoogleAdId()` |
+| `AdjustManager.getAmazonAdId()` | `adjustGetAmazonAdId` | `AdjustCocos.getAmazonAdId()` |
+| `AdjustManager.getLastDeeplink()` | `adjustGetLastDeeplink` | `AdjustCocos.getLastDeeplink()` |
+| `AdjustManager.getSdkVersion()` | `adjustGetSdkVersion` | `AdjustCocos.getSdkVersion()` |
+| `AdjustManager.verifyPlayStorePurchase(...)` | `adjustVerifyPlayStorePurchase` | `AdjustCocos.verifyPlayStorePurchase(...)` |
+| `AdjustManager.onResume()` | `adjustOnResume` | `AdjustCocos.onResume()` |
+| `AdjustManager.onPause()` | `adjustOnPause` | `AdjustCocos.onPause()` |
+
+### 原生回调到 TypeScript 监听映射
+
+| 原生回调事件 | TypeScript 监听 / 等待目标 |
+| --- | --- |
+| `adjustOnSessionTrackingSucceeded` | `onSessionTrackingSucceeded(...)` |
+| `adjustOnSessionTrackingFailed` | `onSessionTrackingFailed(...)` |
+| `adjustOnEventTrackingSucceeded` | `onEventTrackingSucceeded(...)` |
+| `adjustOnEventTrackingFailed` | `onEventTrackingFailed(...)` |
+| `adjustOnAttributionChanged` | `onAttributionChanged(...)`、`getAttributionWithTimeout(...)` |
+| `adjustOnDeferredDeeplinkResponse` | `onDeferredDeeplinkResponse(...)` |
+| `adjustOnAdidRead` | `getAdidWithTimeout(...)` |
+| `adjustOnGoogleAdIdRead` | `onGoogleAdIdRead(...)`、`getGoogleAdIdWithTimeout(...)` |
+| `adjustOnAmazonAdIdRead` | `onAmazonAdIdRead(...)`、`getAmazonAdIdWithTimeout(...)` |
+| `adjustOnLastDeeplinkRead` | `onLastDeeplinkRead(...)`、`getLastDeeplinkWithTimeout(...)` |
+| `adjustOnSdkVersionRead` | `onSdkVersionRead(...)`、`getSdkVersionWithTimeout(...)` |
+| `adjustOnPlayStorePurchaseVerified` | `onPlayStorePurchaseVerified(...)`、`verifyPlayStorePurchaseWithTimeout(...)` |
+| `adjustInstallReferrerRead` | `onInstallReferrerRead(...)`、`getInstallReferrerWithTimeout(...)` |
+
+### 直连静态 API 映射
+
+这部分不会经过 `jsbBridgeWrapper.dispatchEventToNative(...)`，而是通过 `native.reflection.callStaticMethod(...)` 直接调用 `com.adjust.sdk.Adjust`。
+
+| TypeScript API | 直接调用的 Android 方法 |
+| --- | --- |
+| `AdjustManager.enable()` | `Adjust.enable()` |
+| `AdjustManager.disable()` | `Adjust.disable()` |
+| `AdjustManager.switchToOfflineMode()` | `Adjust.switchToOfflineMode()` |
+| `AdjustManager.switchBackToOnlineMode()` | `Adjust.switchBackToOnlineMode()` |
+| `AdjustManager.addGlobalCallbackParameter(key, value)` | `Adjust.addGlobalCallbackParameter(key, value)` |
+| `AdjustManager.addGlobalPartnerParameter(key, value)` | `Adjust.addGlobalPartnerParameter(key, value)` |
+| `AdjustManager.removeGlobalCallbackParameter(key)` | `Adjust.removeGlobalCallbackParameter(key)` |
+| `AdjustManager.removeGlobalPartnerParameter(key)` | `Adjust.removeGlobalPartnerParameter(key)` |
+| `AdjustManager.removeGlobalCallbackParameters()` | `Adjust.removeGlobalCallbackParameters()` |
+| `AdjustManager.removeGlobalPartnerParameters()` | `Adjust.removeGlobalPartnerParameters()` |
+| `AdjustManager.endFirstSessionDelay()` | `Adjust.endFirstSessionDelay()` |
+| `AdjustManager.enableCoppaComplianceInDelay()` | `Adjust.enableCoppaComplianceInDelay()` |
+| `AdjustManager.disableCoppaComplianceInDelay()` | `Adjust.disableCoppaComplianceInDelay()` |
+| `AdjustManager.enablePlayStoreKidsComplianceInDelay()` | `Adjust.enablePlayStoreKidsComplianceInDelay()` |
+| `AdjustManager.disablePlayStoreKidsComplianceInDelay()` | `Adjust.disablePlayStoreKidsComplianceInDelay()` |
+| `AdjustManager.setExternalDeviceIdInDelay(id)` | `Adjust.setExternalDeviceIdInDelay(id)` |
+
 ## 已支持能力
 
 - SDK 初始化与生命周期管理
